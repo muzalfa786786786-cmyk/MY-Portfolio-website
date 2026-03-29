@@ -7,7 +7,7 @@ This website showcases my skills, projects, and contact information with a clean
 
 ## 🚀 Live Demo
 
-🔗 https://your-vercel-link.vercel.app
+🔗 https://my-portfolio-website-orpin-phi.vercel.app
 
 ---
 
@@ -60,7 +60,7 @@ Follow these steps to run the project locally:
 
 # Clone repository
 
-git clone https://github.com/your-username/portfolio-website.git
+git clone https://[github.com/your-username/portfolio-website.git](https://github.com/muzalfa786786786-cmyk/MY-Portfolio-website)
 
 # Navigate to project folder
 
@@ -78,7 +78,8 @@ npm start
 
 ## 📸 Screenshots
 
-(Add your project screenshots here)
+<img width="927" height="428" alt="image" src="https://github.com/user-attachments/assets/3eb98cd5-4bfc-4494-838d-0b477eba02eb" />
+
 
 ---
 
