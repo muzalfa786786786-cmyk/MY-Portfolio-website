@@ -7,12 +7,6 @@ import logoImage from "./assets/logo.png";
 
 import "./App.css";
 
-const LoadingSpinner = () => (
-  <div className="loading-spinner">
-    <div className="spinner"></div>
-    <p>Loading...</p>
-  </div>
-);
 // Lazy load components for better performance
 // const Home = lazy(() => import("./Home"));
 // const About = lazy(() => import("./About"));
