@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
+import { useState } from "react";
 import Home from "./Home";
 import About from "./About";
 import Projects from "./Projects";
@@ -13,16 +14,26 @@ import "./App.css";
 // const Projects = lazy(() => import("./Projects"));
 // const Contact = lazy(() => import("./Contact"));
 
-// Navigation links configuration
-const navLinks = [
-  { path: "/", label: "Home", exact: true },
-  { path: "/about", label: "About", exact: false },
-  { path: "/projects", label: "Projects", exact: false },
-  { path: "/contact", label: "Contact", exact: false },
-];
 
 // Navbar component
 const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const navLinks = [
+    { path: "/", label: "Home", exact: true },
+    { path: "/about", label: "About", exact: false },
+    { path: "/projects", label: "Projects", exact: false },
+    { path: "/contact", label: "Contact", exact: false },
+  ];
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <header className="header">
 <div className="logo-container">
@@ -32,7 +43,7 @@ const Navbar = () => {
   </div>
 </div>
 
-      <nav className="nav-menu" aria-label="Main Navigation">
+      <nav className={`nav-menu ${isMenuOpen ? 'active' : ''}`} aria-label="Main Navigation">
         {navLinks.map((link) => (
           <NavLink
             key={link.path}
@@ -41,13 +52,14 @@ const Navbar = () => {
               `nav-link ${isActive ? "active" : ""}`
             }
             end={link.exact}
+            onClick={closeMenu}
           >
             {link.label}
           </NavLink>
         ))}
       </nav>
 
-      <button className="mobile-menu-btn" aria-label="Menu">
+      <button className="mobile-menu-btn" onClick={toggleMenu} aria-label="Menu">
         <span></span>
         <span></span>
         <span></span>
@@ -86,8 +98,8 @@ function App() {
   return (
     <Router>
       <div className="app-container">
-        <Navbar />
         
+        <Navbar />
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -99,7 +111,6 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
-
         <Footer />
       </div>
     </Router>
