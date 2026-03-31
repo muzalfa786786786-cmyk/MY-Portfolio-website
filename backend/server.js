@@ -6,9 +6,14 @@ const rateLimit = require("express-rate-limit");
 
 const app = express();
 
-// CORS configuration
+// CORS configuration - Allow both localhost and production
 app.use(cors({
-  origin: "https://my-portfolio-website-orpin-phi.vercel.app",
+  origin: [
+    "https://my-portfolio-website-orpin-phi.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:5000",
+    "http://localhost:5001"
+  ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
@@ -31,7 +36,7 @@ app.get("/health", (req, res) => {
   res.status(200).json({ 
     status: "OK", 
     message: "Server is running",
-    emailConfigured: !!process.env.EMAIL_USER,
+    emailConfigured: !!(process.env.EMAIL_USER && process.env.EMAIL_PASS),
     timestamp: new Date().toISOString()
   });
 });
@@ -105,7 +110,7 @@ app.post("/send-email", validateContactForm, async (req, res) => {
 
     // Email to owner (you)
     const mailOptionsToOwner = {
-      from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
+      from: `"Muzalfa Bibi Portfolio" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
       subject: `📧 New Contact from ${name}`,
       html: `
@@ -118,6 +123,7 @@ app.post("/send-email", validateContactForm, async (req, res) => {
             <p style="background: white; padding: 10px; border-radius: 5px;">${message.replace(/\n/g, '<br>')}</p>
           </div>
           <p><strong>📅 Sent at:</strong> ${new Date().toLocaleString()}</p>
+          <p><strong>🌐 From IP:</strong> ${req.ip || req.connection.remoteAddress}</p>
         </div>
       `,
       text: `New Contact Form Submission\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}\n\nSent at: ${new Date().toLocaleString()}`
@@ -139,15 +145,16 @@ app.post("/send-email", validateContactForm, async (req, res) => {
           </div>
           <p>In the meantime, you can:</p>
           <ul>
-            <li>Check out my portfolio</li>
-            <li>Connect with me on LinkedIn</li>
-            <li>Follow my GitHub for updates</li>
+            <li>📂 Check out my projects: <a href="https://my-portfolio-website-orpin-phi.vercel.app/projects">View Portfolio</a></li>
+            <li>🔗 Connect with me on <a href="https://linkedin.com/in/muzalfa-bibi-49ba203b2">LinkedIn</a></li>
+            <li>🐙 Follow my <a href="https://github.com/muzalfa786786786-cmyk">GitHub</a> for updates</li>
           </ul>
           <hr style="margin: 20px 0;">
           <p style="color: #666; font-size: 12px;">Best regards,<br><strong>Muzalfa Bibi</strong><br>Web Developer & IT Student</p>
+          <p style="color: #999; font-size: 10px;">This is an automated response. Please do not reply to this email.</p>
         </div>
       `,
-      text: `Thank You for Reaching Out!\n\nDear ${name},\n\nThank you for contacting me. I have received your message and will get back to you within 24-48 hours.\n\nYour message: "${message}"\n\nBest regards,\nMuzalfa Bibi\nWeb Developer & IT Student`
+      text: `Thank You for Reaching Out!\n\nDear ${name},\n\nThank you for contacting me. I have received your message and will get back to you within 24-48 hours.\n\nYour message: "${message}"\n\nBest regards,\nMuzalfa Bibi\nWeb Developer & IT Student\n\nThis is an automated response.`
     };
 
     // Send both emails
@@ -180,9 +187,28 @@ app.post("/send-email", validateContactForm, async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ 
+    success: false, 
+    error: "Route not found" 
+  });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error("Server error:", err);
+  res.status(500).json({ 
+    success: false, 
+    error: "Internal server error" 
+  });
+});
+
+const PORT = process.env.PORT || 5001; // Changed to 5001 to avoid conflicts
 app.listen(PORT, () => {
   console.log(`\n🚀 Server running on port ${PORT}`);
   console.log(`📧 Email service: ${process.env.EMAIL_USER ? 'Configured' : 'NOT CONFIGURED'}`);
-  console.log(`🌐 Health check: http://localhost:${PORT}/health\n`);
+  console.log(`📧 Email Account: ${process.env.EMAIL_USER || 'Not set'}`);
+  console.log(`🌐 Health check: http://localhost:${PORT}/health`);
+  console.log(`🔗 CORS allowed origins: Localhost + Vercel\n`);
 });
