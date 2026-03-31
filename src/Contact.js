@@ -44,13 +44,20 @@ const useFormValidation = (initialValues) => {
     validate({ [name]: value });
   };
 
+  const resetForm = () => {
+    setValues(initialValues);
+    setErrors({});
+    setIsSubmitting(false);
+  };
+
   return {
     values,
     errors,
     isSubmitting,
     setIsSubmitting,
     handleChange,
-    validate
+    validate,
+    resetForm
   };
 };
 
@@ -116,6 +123,7 @@ const SuccessModal = ({ isOpen, onClose, formData }) => {
 const Contact = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [serverError, setServerError] = useState("");
   
   const initialValues = {
     name: "",
@@ -129,28 +137,63 @@ const Contact = () => {
     isSubmitting,
     setIsSubmitting,
     handleChange,
-    validate
+    validate,
+    resetForm
   } = useFormValidation(initialValues);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setServerError("");
     
     if (validate()) {
       setIsSubmitting(true);
       setIsLoading(true);
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Here you would typically send data to your backend
-      console.log('Form submitted:', values);
-      
-      setIsLoading(false);
-      setShowSuccess(true);
-      setIsSubmitting(false);
-      
-      // Reset form after successful submission
-      // Reset logic would go here
+      try {
+        console.log("Sending data:", { name: values.name, email: values.email, message: values.message });
+        
+        const response = await fetch("http://localhost:5000/send-email", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            name: values.name,
+            email: values.email,
+            message: values.message
+          })
+        });
+
+        // Parse response as JSON
+        const data = await response.json();
+        console.log("Response:", data);
+
+        if (response.ok && data.success) {
+          // Success
+          setIsLoading(false);
+          setShowSuccess(true);
+          resetForm();
+          
+          // Auto close success modal after 5 seconds
+          setTimeout(() => {
+            setShowSuccess(false);
+          }, 5000);
+        } else {
+          // Error from server
+          throw new Error(data.error || "Failed to send message");
+        }
+      } catch (error) {
+        console.error("Error details:", error);
+        setServerError(error.message || "Network error. Please check if backend server is running.");
+        setIsLoading(false);
+        
+        // Clear error after 5 seconds
+        setTimeout(() => {
+          setServerError("");
+        }, 5000);
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -158,8 +201,8 @@ const Contact = () => {
     {
       icon: "📧",
       title: "Email",
-      info: "Muzalfa@example.com",
-      link: "muzalfa786786768@example.com"
+      info: "muzalfa786786786@example.com",
+      link: "mailto:muzalfa786786786@example.com"
     },
     {
       icon: "📱",
@@ -170,7 +213,7 @@ const Contact = () => {
     {
       icon: "📍",
       title: "Location",
-      info: "Pakistan,Punjab,Lahore",
+      info: "Lahore, Punjab, Pakistan",
       link: null
     },
     {
@@ -184,7 +227,7 @@ const Contact = () => {
   const socialLinks = [
     { platform: "GitHub", url: "https://github.com/muzalfa786786786-cmyk", icon: "🐙", color: "#333" },
     { platform: "LinkedIn", url: "https://linkedin.com/in/muzalfa-bibi-49ba203b2", icon: "🔗", color: "#0077b5" },
-    { platform: "Email", url: "muzalfa786786786@example.com", icon: "📧", color: "#0077b5" }
+    { platform: "Email", url: "mailto:muzalfa786786786@example.com", icon: "📧", color: "#ea4335" }
   ];
 
   return (
@@ -222,7 +265,7 @@ const Contact = () => {
                       name="name"
                       value={values.name}
                       onChange={handleChange}
-                      placeholder="your name"
+                      placeholder="Your name"
                       className={errors.name ? 'error' : ''}
                       disabled={isSubmitting}
                     />
@@ -269,13 +312,22 @@ const Contact = () => {
                   </div>
                 </div>
 
+                {serverError && (
+                  <div className="error-message-server">
+                    ❌ {serverError}
+                  </div>
+                )}
+
                 <button 
                   type="submit" 
                   className="submit-btn"
                   disabled={isSubmitting}
                 >
                   {isLoading ? (
-                    <span className="loading-spinner-small"></span>
+                    <>
+                      <span className="loading-spinner-small"></span>
+                      Sending...
+                    </>
                   ) : (
                     <>
                       Send Message
