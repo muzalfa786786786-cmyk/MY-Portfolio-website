@@ -152,7 +152,7 @@ const Contact = () => {
       try {
         console.log("Sending data:", { name: values.name, email: values.email, message: values.message });
         
-        const response = await fetch("http://localhost:5000/send-email", {
+        const response = await fetch("https://my-portfolio-website-1-p818.onrender.com", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
