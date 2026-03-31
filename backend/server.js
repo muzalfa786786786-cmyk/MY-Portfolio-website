@@ -8,10 +8,10 @@ const app = express();
 
 // CORS configuration
 app.use(cors({
-  origin: '*',
+  origin: "https://my-portfolio-website-orpin-phi.vercel.app",
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 app.use(express.json());
