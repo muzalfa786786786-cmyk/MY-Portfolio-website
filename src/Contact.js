@@ -150,12 +150,16 @@ const Contact = () => {
       setIsLoading(true);
       
       try {
-        console.log("Sending data:", { name: values.name, email: values.email, message: values.message });
+        console.log("Sending data:", { name: values.name, email: values.email });
         
-        const response = await fetch("https://my-portfolio-website-1-p818.onrender.com/send-email", {
+        // ✅ Use environment variable for API URL (better for production)
+        const API_URL = process.env.REACT_APP_API_URL || "https://my-portfolio-website-1-p818.onrender.com/send-email";
+        
+        const response = await fetch(API_URL, {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Accept": "application/json"
           },
           body: JSON.stringify({
             name: values.name,
@@ -164,11 +168,16 @@ const Contact = () => {
           })
         });
 
+        // Check if response is OK
+        if (!response.ok) {
+          throw new Error(`Server error: ${response.status}`);
+        }
+
         // Parse response as JSON
         const data = await response.json();
         console.log("Response:", data);
 
-        if (response.ok && data.success) {
+        if (data.success) {
           // Success
           setIsLoading(false);
           setShowSuccess(true);
@@ -184,7 +193,18 @@ const Contact = () => {
         }
       } catch (error) {
         console.error("Error details:", error);
-        setServerError(error.message || "Network error. Please check if backend server is running.");
+        
+        // Better error messages for users
+        let errorMessage = "Failed to send message. ";
+        if (error.message.includes("Failed to fetch")) {
+          errorMessage += "Backend server is not responding. Please try again later.";
+        } else if (error.message.includes("500")) {
+          errorMessage += "Server error. Please try again later.";
+        } else {
+          errorMessage += error.message;
+        }
+        
+        setServerError(errorMessage);
         setIsLoading(false);
         
         // Clear error after 5 seconds
@@ -268,6 +288,7 @@ const Contact = () => {
                       placeholder="Your name"
                       className={errors.name ? 'error' : ''}
                       disabled={isSubmitting}
+                      required
                     />
                   </div>
                   {errors.name && <span className="error-message">{errors.name}</span>}
@@ -286,6 +307,7 @@ const Contact = () => {
                       placeholder="youremail@example.com"
                       className={errors.email ? 'error' : ''}
                       disabled={isSubmitting}
+                      required
                     />
                   </div>
                   {errors.email && <span className="error-message">{errors.email}</span>}
@@ -304,6 +326,7 @@ const Contact = () => {
                       rows="5"
                       className={errors.message ? 'error' : ''}
                       disabled={isSubmitting}
+                      required
                     ></textarea>
                   </div>
                   {errors.message && <span className="error-message">{errors.message}</span>}
