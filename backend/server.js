@@ -6,7 +6,7 @@ const rateLimit = require("express-rate-limit");
 
 const app = express();
 
-// CORS configuration - Allow both localhost and production
+// CORS configuration
 app.use(cors({
   origin: [
     "https://my-portfolio-website-orpin-phi.vercel.app",
@@ -18,6 +18,9 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+// Handle preflight requests
+app.options('*', cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -39,6 +42,19 @@ app.get("/health", (req, res) => {
     emailConfigured: !!(process.env.EMAIL_USER && process.env.EMAIL_PASS),
     timestamp: new Date().toISOString()
   });
+});
+
+// Root endpoint
+app.get("/", (req, res) => {
+  res.status(200).json({ 
+    status: "OK", 
+    message: "Portfolio Backend API is running"
+  });
+});
+
+// Test endpoint
+app.get("/test", (req, res) => {
+  res.json({ message: "Test endpoint working!" });
 });
 
 // Validation middleware
@@ -84,6 +100,7 @@ app.post("/send-email", validateContactForm, async (req, res) => {
   console.log("\n📧 New message received:");
   console.log(`   From: ${name} <${email}>`);
   console.log(`   Message: ${message.substring(0, 50)}...`);
+  console.log(`   Origin: ${req.headers.origin}`);
 
   // Check email configuration
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
@@ -114,19 +131,13 @@ app.post("/send-email", validateContactForm, async (req, res) => {
       to: process.env.EMAIL_USER,
       subject: `📧 New Contact from ${name}`,
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
-          <h2 style="color: #667eea;">New Contact Form Submission</h2>
-          <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 15px 0;">
-            <p><strong>👤 Name:</strong> ${name}</p>
-            <p><strong>📧 Email:</strong> <a href="mailto:${email}">${email}</a></p>
-            <p><strong>💬 Message:</strong></p>
-            <p style="background: white; padding: 10px; border-radius: 5px;">${message.replace(/\n/g, '<br>')}</p>
-          </div>
-          <p><strong>📅 Sent at:</strong> ${new Date().toLocaleString()}</p>
-          <p><strong>🌐 From IP:</strong> ${req.ip || req.connection.remoteAddress}</p>
-        </div>
-      `,
-      text: `New Contact Form Submission\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}\n\nSent at: ${new Date().toLocaleString()}`
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
+        <p><strong>Sent at:</strong> ${new Date().toLocaleString()}</p>
+      `
     };
 
     // Email to user (auto-reply)
@@ -135,26 +146,13 @@ app.post("/send-email", validateContactForm, async (req, res) => {
       to: email,
       subject: "Thank you for contacting me! 🙏",
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
-          <h2 style="color: #667eea;">Thank You for Reaching Out! 🙏</h2>
-          <p>Dear ${name},</p>
-          <p>Thank you for contacting me. I have received your message and will get back to you within 24-48 hours.</p>
-          <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 15px 0;">
-            <p><strong>Your message:</strong></p>
-            <p style="background: white; padding: 10px; border-radius: 5px;">"${message}"</p>
-          </div>
-          <p>In the meantime, you can:</p>
-          <ul>
-            <li>📂 Check out my projects: <a href="https://my-portfolio-website-orpin-phi.vercel.app/projects">View Portfolio</a></li>
-            <li>🔗 Connect with me on <a href="https://linkedin.com/in/muzalfa-bibi-49ba203b2">LinkedIn</a></li>
-            <li>🐙 Follow my <a href="https://github.com/muzalfa786786786-cmyk">GitHub</a> for updates</li>
-          </ul>
-          <hr style="margin: 20px 0;">
-          <p style="color: #666; font-size: 12px;">Best regards,<br><strong>Muzalfa Bibi</strong><br>Web Developer & IT Student</p>
-          <p style="color: #999; font-size: 10px;">This is an automated response. Please do not reply to this email.</p>
-        </div>
-      `,
-      text: `Thank You for Reaching Out!\n\nDear ${name},\n\nThank you for contacting me. I have received your message and will get back to you within 24-48 hours.\n\nYour message: "${message}"\n\nBest regards,\nMuzalfa Bibi\nWeb Developer & IT Student\n\nThis is an automated response.`
+        <h2>Thank You for Reaching Out! 🙏</h2>
+        <p>Dear ${name},</p>
+        <p>Thank you for contacting me. I have received your message and will get back to you within 24-48 hours.</p>
+        <p><strong>Your message:</strong></p>
+        <p>"${message}"</p>
+        <p>Best regards,<br>Muzalfa Bibi<br>Web Developer & IT Student</p>
+      `
     };
 
     // Send both emails
@@ -173,7 +171,6 @@ app.post("/send-email", validateContactForm, async (req, res) => {
     console.error("❌ Email error:", error.message);
     
     if (error.code === 'EAUTH') {
-      console.error("Authentication failed. Check your email and app password.");
       return res.status(500).json({ 
         success: false, 
         error: "Email authentication failed. Please check credentials." 
@@ -204,11 +201,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5001; // Changed to 5001 to avoid conflicts
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`\n🚀 Server running on port ${PORT}`);
   console.log(`📧 Email service: ${process.env.EMAIL_USER ? 'Configured' : 'NOT CONFIGURED'}`);
   console.log(`📧 Email Account: ${process.env.EMAIL_USER || 'Not set'}`);
   console.log(`🌐 Health check: http://localhost:${PORT}/health`);
-  console.log(`🔗 CORS allowed origins: Localhost + Vercel\n`);
 });
