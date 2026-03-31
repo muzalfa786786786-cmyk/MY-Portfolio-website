@@ -48,13 +48,12 @@ app.get("/health", (req, res) => {
 app.get("/", (req, res) => {
   res.status(200).json({ 
     status: "OK", 
-    message: "Portfolio Backend API is running"
+    message: "Portfolio Backend API is running",
+    endpoints: {
+      health: "/health",
+      sendEmail: "/send-email (POST)"
+    }
   });
-});
-
-// Test endpoint
-app.get("/test", (req, res) => {
-  res.json({ message: "Test endpoint working!" });
 });
 
 // Validation middleware
@@ -99,20 +98,16 @@ app.post("/send-email", validateContactForm, async (req, res) => {
 
   console.log("\n📧 New message received:");
   console.log(`   From: ${name} <${email}>`);
-  console.log(`   Message: ${message.substring(0, 50)}...`);
-  console.log(`   Origin: ${req.headers.origin}`);
 
-  // Check email configuration
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
     console.error("❌ Email credentials not configured!");
     return res.status(500).json({ 
       success: false, 
-      error: "Email service not configured. Please contact administrator." 
+      error: "Email service not configured" 
     });
   }
 
   try {
-    // Create transporter
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -121,65 +116,37 @@ app.post("/send-email", validateContactForm, async (req, res) => {
       }
     });
 
-    // Verify transporter connection
     await transporter.verify();
     console.log("✅ Email transporter verified");
 
-    // Email to owner (you)
-    const mailOptionsToOwner = {
-      from: `"Muzalfa Bibi Portfolio" <${process.env.EMAIL_USER}>`,
+    // Email to owner
+    await transporter.sendMail({
+      from: `"Portfolio" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
       subject: `📧 New Contact from ${name}`,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
-        <p><strong>Sent at:</strong> ${new Date().toLocaleString()}</p>
-      `
-    };
-
-    // Email to user (auto-reply)
-    const mailOptionsToUser = {
-      from: `"Muzalfa Bibi" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "Thank you for contacting me! 🙏",
-      html: `
-        <h2>Thank You for Reaching Out! 🙏</h2>
-        <p>Dear ${name},</p>
-        <p>Thank you for contacting me. I have received your message and will get back to you within 24-48 hours.</p>
-        <p><strong>Your message:</strong></p>
-        <p>"${message}"</p>
-        <p>Best regards,<br>Muzalfa Bibi<br>Web Developer & IT Student</p>
-      `
-    };
-
-    // Send both emails
-    await transporter.sendMail(mailOptionsToOwner);
+      html: `<h2>New Contact</h2><p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong></p><p>${message}</p>`
+    });
     console.log("✅ Email sent to owner");
     
-    await transporter.sendMail(mailOptionsToUser);
-    console.log("✅ Auto-reply sent to user");
+    // Auto-reply
+    await transporter.sendMail({
+      from: `"Muzalfa Bibi" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "Thank you for contacting me!",
+      html: `<h2>Thank You!</h2><p>Dear ${name},</p><p>Thanks for reaching out. I'll get back to you within 24-48 hours.</p><p>Best,<br>Muzalfa Bibi</p>`
+    });
+    console.log("✅ Auto-reply sent");
 
     return res.status(200).json({ 
       success: true, 
-      message: "Message sent successfully! I'll get back to you soon." 
+      message: "Message sent successfully!" 
     });
 
   } catch (error) {
     console.error("❌ Email error:", error.message);
-    
-    if (error.code === 'EAUTH') {
-      return res.status(500).json({ 
-        success: false, 
-        error: "Email authentication failed. Please check credentials." 
-      });
-    }
-    
     return res.status(500).json({ 
       success: false, 
-      error: "Failed to send message. Please try again later." 
+      error: "Failed to send message" 
     });
   }
 });
@@ -192,19 +159,8 @@ app.use((req, res) => {
   });
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error("Server error:", err);
-  res.status(500).json({ 
-    success: false, 
-    error: "Internal server error" 
-  });
-});
-
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`\n🚀 Server running on port ${PORT}`);
-  console.log(`📧 Email service: ${process.env.EMAIL_USER ? 'Configured' : 'NOT CONFIGURED'}`);
-  console.log(`📧 Email Account: ${process.env.EMAIL_USER || 'Not set'}`);
-  console.log(`🌐 Health check: http://localhost:${PORT}/health`);
+  console.log(`📧 Email: ${process.env.EMAIL_USER ? 'Configured' : 'NOT Configured'}`);
 });
