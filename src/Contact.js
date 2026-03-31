@@ -141,6 +141,7 @@ const Contact = () => {
     resetForm
   } = useFormValidation(initialValues);
 
+  // ✅ COMPLETE WORKING handleSubmit FUNCTION - YAHAN CHANGE KARO
   const handleSubmit = async (e) => {
     e.preventDefault();
     setServerError("");
@@ -150,10 +151,11 @@ const Contact = () => {
       setIsLoading(true);
       
       try {
-        console.log("Sending data:", { name: values.name, email: values.email });
-        
-        // ✅ Use environment variable for API URL (better for production)
+        // ✅ Environment variable based API URL
         const API_URL = process.env.REACT_APP_API_URL || "https://my-portfolio-website-1-p818.onrender.com/send-email";
+        
+        console.log("📡 Sending to:", API_URL);
+        console.log("📝 Data:", { name: values.name, email: values.email });
         
         const response = await fetch(API_URL, {
           method: "POST",
@@ -168,46 +170,27 @@ const Contact = () => {
           })
         });
 
-        // Check if response is OK
-        if (!response.ok) {
-          throw new Error(`Server error: ${response.status}`);
-        }
-
-        // Parse response as JSON
+        console.log("📊 Response status:", response.status);
+        
         const data = await response.json();
-        console.log("Response:", data);
+        console.log("📦 Response data:", data);
 
-        if (data.success) {
-          // Success
+        if (response.ok && data.success) {
           setIsLoading(false);
           setShowSuccess(true);
           resetForm();
           
-          // Auto close success modal after 5 seconds
           setTimeout(() => {
             setShowSuccess(false);
           }, 5000);
         } else {
-          // Error from server
           throw new Error(data.error || "Failed to send message");
         }
       } catch (error) {
-        console.error("Error details:", error);
-        
-        // Better error messages for users
-        let errorMessage = "Failed to send message. ";
-        if (error.message.includes("Failed to fetch")) {
-          errorMessage += "Backend server is not responding. Please try again later.";
-        } else if (error.message.includes("500")) {
-          errorMessage += "Server error. Please try again later.";
-        } else {
-          errorMessage += error.message;
-        }
-        
-        setServerError(errorMessage);
+        console.error("❌ Error:", error);
+        setServerError(error.message || "Network error. Please try again.");
         setIsLoading(false);
         
-        // Clear error after 5 seconds
         setTimeout(() => {
           setServerError("");
         }, 5000);
