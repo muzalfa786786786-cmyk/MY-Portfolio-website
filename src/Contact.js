@@ -152,7 +152,7 @@ const Contact = () => {
       
       try {
         // ✅ Environment variable based API URL
-        const API_URL = process.env.REACT_APP_API_URL || "https://my-portfolio-website-1-p818.onrender.com/send-email";
+        const API_URL = process.env.REACT_APP_API_URL || "https://my-portfolio-website-f91g.onrender.com/send-email";
         
         console.log("📡 Sending to:", API_URL);
         console.log("📝 Data:", { name: values.name, email: values.email });
