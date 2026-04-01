@@ -172,7 +172,16 @@ const Contact = () => {
 
         console.log("📊 Response status:", response.status);
         
-        const data = await response.json();
+        let data;
+try {
+  data = await response.json();
+} catch {
+  throw new Error("Server returned invalid response");
+}
+
+if (!response.ok) {
+  throw new Error(data?.error || "Server error");
+}
         console.log("📦 Response data:", data);
 
         if (response.ok && data.success) {
