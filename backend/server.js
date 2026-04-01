@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer");
 const rateLimit = require("express-rate-limit");
 
 const app = express();
-
+app.set('trust proxy', 1);
 // CORS configuration
 app.use(cors({
   origin: [
