@@ -194,7 +194,7 @@ const projectsData = [
       "Statistical memory growth analysis",
       "Long-term performance auditing"
     ],
-    demoLink: "https://github.com/muzalfa786786786-cmyk/Memory-Leak-Detection-Monitoring-Tool"
+    demoLink: "https://www.linkedin.com/feed/update/urn:li:activity:7446783810349862912/?originTrackingId=%2BPGgfTbE%2FEK4Syp%2F1yoEPg%3D%3D"
   },
   {
     id: 5,
