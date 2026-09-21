@@ -102,11 +102,11 @@ const AboutSection = () => {
             
             <div className="about-stats">
               <div className="stat">
-                <span className="stat-number">10+</span>
+                <span className="stat-number">30+</span>
                 <span className="stat-label">Projects</span>
               </div>
               <div className="stat">
-                <span className="stat-number">6+</span>
+                <span className="stat-number">20+</span>
                 <span className="stat-label">Technologies</span>
               </div>
               <div className="stat">
