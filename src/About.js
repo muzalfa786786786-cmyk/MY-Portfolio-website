@@ -42,12 +42,12 @@ const ExperienceCard = ({ experience }) => {
 
 // Skills data configuration
 const skillsData = [
-  { name: "HTML5", level: "Advanced", progress: 90, icon: "🌐" },
-  { name: "CSS3", level: "Advanced", progress: 85, icon: "🎨" },
-  { name: "JavaScript", level: "Advanced", progress: 80, icon: "⚡" },
-  { name: "React", level: "Intermediate", progress: 75, icon: "⚛️" },
-  { name: "Java", level: "Intermediate", progress: 70, icon: "☕" },
-  { name: "MySQL", level: "Intermediate", progress: 65, icon: "🗄️" },
+  { name: "HTML5", level: "Advanced", progress: 100, icon: "🌐" },
+  { name: "CSS3", level: "Advanced", progress: 100, icon: "🎨" },
+  { name: "JavaScript", level: "Advanced", progress: 100, icon: "⚡" },
+  { name: "React", level: "Intermediate", progress: 100, icon: "⚛️" },
+  { name: "Java", level: "Intermediate", progress: 100, icon: "☕" },
+  { name: "MySQL", level: "Intermediate", progress: 100, icon: "🗄️" },
 ];
 
 // Experience data configuration
@@ -127,11 +127,11 @@ const AboutSection = () => {
               </div>
               <div className="floating-card experience-card-small">
                 <span>💻</span>
-                <p>2+ Years Experience</p>
+                <p>3+ Years Experience</p>
               </div>
               <div className="floating-card projects-card-small">
                 <span>🚀</span>
-                <p>10+ Projects Done</p>
+                <p>30+ Projects Done</p>
               </div>
             </div>
           </div>
