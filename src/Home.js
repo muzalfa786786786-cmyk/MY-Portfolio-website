@@ -18,16 +18,123 @@ const SkillItem = ({ name, description, onSkillClick, isActive }) => {
 
 // Skills data configuration
 const skillsData = [
-  { name: "HTML", description: "HTML: Structure of web pages - Creating semantic, accessible markup" },
-  { name: "CSS", description: "CSS: Styling and layout - Modern Flexbox, Grid, and responsive design" },
-  // eslint-disable-next-line no-script-url
-  { name: "JavaScript", description: "JavaScript: Adds interactivity - ES6+, async programming, DOM manipulation" },
-  { name: "React", description: "React: Frontend library - Hooks, Context API, React Router, performance optimization" },
-  { name: "Java", description: "Java: Backend & desktop apps - OOP, Spring Boot, multithreading" },
-  { name: "MySQL", description: "MySQL: Database management - Complex queries, optimization, database design" },
+  {
+    name: "HTML5",
+    description:
+      "HTML5: Semantic structure, accessible markup, and modern web page development",
+  },
+  {
+    name: "CSS3",
+    description:
+      "CSS3: Responsive design, Flexbox, Grid, animations, and modern web styling",
+  },
+  {
+    name: "JavaScript",
+    description:
+      "JavaScript: ES6+, DOM manipulation, asynchronous programming, and interactive web applications",
+  },
+  {
+    name: "React.js",
+    description:
+      "React.js: Component-based UI development, React Router, hooks, and responsive web applications",
+  },
+  {
+    name: "Python",
+    description:
+      "Python: Application development, backend development, automation, and AI-related projects",
+  },
+  {
+    name: "Django",
+    description:
+      "Django: Backend development, database integration, web applications, and REST APIs",
+  },
+  {
+    name: "Java",
+    description:
+      "Java: Object-oriented programming, desktop application development, and software development",
+  },
+  {
+    name: "C++",
+    description:
+      "C++: Object-oriented programming, data structures, algorithms, and application development",
+  },
+  {
+    name: "Dart",
+    description:
+      "Dart: Programming language used for Flutter-based mobile application development",
+  },
+  {
+    name: "SQL",
+    description:
+      "SQL: Database queries, data management, relational databases, and database operations",
+  },
+  {
+    name: "MySQL",
+    description:
+      "MySQL: Relational database management, queries, database design, and data storage",
+  },
+  {
+    name: "SQLite",
+    description:
+      "SQLite: Lightweight database management for desktop and web applications",
+  },
+  {
+    name: "Bootstrap",
+    description:
+      "Bootstrap: Responsive layouts, reusable components, and mobile-friendly web interfaces",
+  },
+  {
+    name: "REST APIs",
+    description:
+      "REST APIs: Connecting frontend and backend applications and working with web services",
+  },
+  {
+    name: "Flutter",
+    description:
+      "Flutter: Cross-platform mobile application development using Dart",
+  },
+  {
+    name: "Firebase",
+    description:
+      "Firebase: Authentication, Firestore, and backend services for applications",
+  },
+  {
+    name: "Git & GitHub",
+    description:
+      "Git & GitHub: Version control, repository management, collaboration, and project tracking",
+  },
+  {
+    name: "OpenCV",
+    description:
+      "OpenCV: Computer vision, image processing, and real-time visual detection projects",
+  },
+  {
+    name: "NLP",
+    description:
+      "NLP: Basic natural language processing concepts used in AI-based applications",
+  },
+  {
+    name: "Generative AI",
+    description:
+      "Generative AI: AI-assisted content generation and AI-based application development",
+  },
+  {
+    name: "Prompt Engineering",
+    description:
+      "Prompt Engineering: Designing effective prompts for AI tools and Generative AI workflows",
+  },
+  {
+    name: "Google Gemini",
+    description:
+      "Google Gemini: Generative AI tools for research, brainstorming, planning, and development tasks",
+  },
+  {
+    name: "Cisco Packet Tracer",
+    description:
+      "Cisco Packet Tracer: Network design, routing, switching, DHCP, DNS, and server configuration",
+  },
 ];
 
-// Hero Section Component
 // Hero Section Component
 const HeroSection = ({ onViewProjects, onContactMe }) => {
   return (
@@ -37,22 +144,30 @@ const HeroSection = ({ onViewProjects, onContactMe }) => {
           <h1 className="hero-title">
             Hi, I'm <span className="highlight">Muzalfa</span> 👋
           </h1>
-          <h2 className="hero-subtitle">Web Developer & IT Student</h2>
+
+          <h2 className="hero-subtitle">
+            Software Engineering Student | Full Stack Developer
+          </h2>
+
           <p className="hero-description">
-            I build modern web applications and AI-based systems.
-            Passionate about creating user-friendly designs and seamless experiences.
+            I’m a Software Engineering student with hands-on experience in web
+            development, AI-based projects, and software engineering. I enjoy
+            building practical, user-friendly applications and learning modern
+            technologies.
           </p>
+
           <div className="hero-buttons">
-            <button 
-              className="btn-primary" 
+            <button
+              className="btn-primary"
               onClick={onViewProjects}
               aria-label="View my projects"
             >
               View Projects
               <span className="btn-icon">→</span>
             </button>
-            <button 
-              className="btn-secondary" 
+
+            <button
+              className="btn-secondary"
               onClick={onContactMe}
               aria-label="Contact me"
             >
@@ -60,12 +175,12 @@ const HeroSection = ({ onViewProjects, onContactMe }) => {
             </button>
           </div>
         </div>
-        
+
         <div className="hero-image">
           <div className="code-icon">
-            <img 
+            <img
               src={profileImage}
-              alt="Muzalfa - Web Developer"
+              alt="Muzalfa - Software Engineering Student and Full Stack Developer"
               className="hero-img"
             />
           </div>
@@ -82,11 +197,12 @@ const SkillsSection = ({ skills, selectedSkill, onSkillSelect }) => {
       <div className="container">
         <div className="section-header">
           <h2 className="section-title">Technical Skills</h2>
+
           <p className="section-subtitle">
             Technologies and tools I work with
           </p>
         </div>
-        
+
         <div className="skills-grid">
           {skills.map((skill) => (
             <SkillItem
@@ -98,13 +214,19 @@ const SkillsSection = ({ skills, selectedSkill, onSkillSelect }) => {
             />
           ))}
         </div>
-        
+
         {selectedSkill && (
           <div className="skill-detail animate-fade-in">
             <div className="skill-detail-content">
-              <h3 className="skill-detail-title">{selectedSkill.name}</h3>
-              <p className="skill-detail-description">{selectedSkill.description}</p>
-              <button 
+              <h3 className="skill-detail-title">
+                {selectedSkill.name}
+              </h3>
+
+              <p className="skill-detail-description">
+                {selectedSkill.description}
+              </p>
+
+              <button
                 className="skill-detail-close"
                 onClick={() => onSkillSelect(null)}
                 aria-label="Close skill details"
@@ -134,27 +256,33 @@ const Home = () => {
   }, [navigate]);
 
   // Skill selection handler
-  const handleSkillSelect = useCallback((skillName, skillDescription) => {
-    if (skillName === null) {
-      setSelectedSkill(null);
-      return;
-    }
+  const handleSkillSelect = useCallback(
+    (skillName, skillDescription) => {
+      if (skillName === null) {
+        setSelectedSkill(null);
+        return;
+      }
 
-    if (selectedSkill?.name === skillName) {
-      setSelectedSkill(null); // Close if same skill clicked
-    } else {
-      setSelectedSkill({ name: skillName, description: skillDescription });
-    }
-  }, [selectedSkill]);
+      if (selectedSkill?.name === skillName) {
+        setSelectedSkill(null);
+      } else {
+        setSelectedSkill({
+          name: skillName,
+          description: skillDescription,
+        });
+      }
+    },
+    [selectedSkill]
+  );
 
   return (
     <div className="home-container">
-      <HeroSection 
+      <HeroSection
         onViewProjects={handleViewProjects}
         onContactMe={handleContactMe}
       />
-      
-      <SkillsSection 
+
+      <SkillsSection
         skills={skillsData}
         selectedSkill={selectedSkill}
         onSkillSelect={handleSkillSelect}
