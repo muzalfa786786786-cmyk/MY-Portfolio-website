@@ -136,7 +136,7 @@ const projectsData = [
     longDesc:
       "AI Lecturer is a final year project designed as an AI-powered assistant for slide generation and presentation support. The system can transform topics and uploaded documents into structured presentation content, support AI-generated slides, provide text-to-speech presentation capabilities, and enable interactive question answering. The project also incorporates Retrieval-Augmented Generation (RAG), NLP, multilingual support, quizzes and assessments, analytics, and AI avatar-based presentation features.",
     category: "AI Application",
-    image: portfolioImage,
+    image: src/assets/AI Lecturer.png,
     technologies: [
       "React",
       "Next.js",
