@@ -475,7 +475,7 @@ const Projects = () => {
           </p>
 
           <p className="hero-subtitle-small">
-            🚀 15+ Projects | 💻 Multiple Technologies | 🤖 AI & Web Development
+            🚀 30+ Projects | 💻 Multiple Technologies | 🤖 AI & Web Development
           </p>
         </div>
       </section>
