@@ -138,7 +138,7 @@ const projectsData = [
     longDesc:
       "AI Lecturer is a final year project designed as an AI-powered assistant for slide generation and presentation support. The system can transform topics and uploaded documents into structured presentation content, support AI-generated slides, provide text-to-speech presentation capabilities, and enable interactive question answering. The project also incorporates Retrieval-Augmented Generation (RAG), NLP, multilingual support, quizzes and assessments, analytics, and AI avatar-based presentation features.",
     category: "AI Application",
-    image: src/assets/AI Lecturer.png,
+    image: aiLecturerImage,
     technologies: [
       "React",
       "Next.js",
@@ -351,7 +351,7 @@ const projectsData = [
     longDesc:
       "MB Auto Parts Inventory System is a desktop-based inventory management application developed for managing an auto parts business. The system was converted from a Java POS project into a modern JavaFX desktop application using Java 17 and Maven. It provides an organized interface for managing inventory, monitoring low-stock items, and maintaining backup data.",
     category: "Developer Tool",
-    image: src/assets/MB-Auto Parts.png,
+    image: mbAutoPartsImage,
     technologies: [
       "Java 17",
       "JavaFX",
@@ -477,7 +477,7 @@ const Projects = () => {
           </p>
 
           <p className="hero-subtitle-small">
-            🚀 30+ Projects | 💻 Multiple Technologies | 🤖 AI & Web Development
+            🚀 10+ Projects | 💻 Multiple Technologies | 🤖 AI & Web Development
           </p>
         </div>
       </section>
