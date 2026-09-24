@@ -180,7 +180,7 @@ const AboutSection = () => {
 
               <div className="floating-card projects-card-small">
                 <span>🚀</span>
-                <p>10+ Projects Done</p>
+                <p>30+ Projects Done</p>
               </div>
 
             </div>
