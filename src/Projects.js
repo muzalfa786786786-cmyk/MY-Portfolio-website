@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 // Local project images:
+import aiLecturerImage from "./assets/AI Lecturer.png";
+import mbAutoPartsImage from "./assets/MB-Auto Parts.png";
 import todoImage from "./assets/TO DO.png";
 import heelsImage from "./assets/Heels.png";
 import hijabImage from "./assets/Hijab.png";
