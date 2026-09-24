@@ -1,3 +1,5 @@
+/* eslint-disable no-script-url */
+
 import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import profileImage from "./assets/profile.png";
