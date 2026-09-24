@@ -349,7 +349,7 @@ const projectsData = [
     longDesc:
       "MB Auto Parts Inventory System is a desktop-based inventory management application developed for managing an auto parts business. The system was converted from a Java POS project into a modern JavaFX desktop application using Java 17 and Maven. It provides an organized interface for managing inventory, monitoring low-stock items, and maintaining backup data.",
     category: "Developer Tool",
-    image: portfolioImage,
+    image: src/assets/MB-Auto Parts.png,
     technologies: [
       "Java 17",
       "JavaFX",
