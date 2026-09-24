@@ -70,9 +70,9 @@ const skillsData = [
 // Experience data configuration
 const experiencesData = [
   {
-    title: "BS Information Technology",
+    title: "BSC Information Engineering Technology",
     description:
-      "Currently pursuing my Bachelor's degree in Information Technology at Superior University Lahore. I have completed my 6th semester and continue to build practical skills through academic and personal software projects.",
+      "Currently pursuing my Bachelor's degree in Information Engineering Technology at Superior University Lahore. I have completed my 6th semester and continue to build practical skills through academic and personal software projects.",
     date: "2023 - Present",
     icon: "🎓"
   },
